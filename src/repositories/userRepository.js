@@ -75,7 +75,9 @@ const getUserByIdWithoutPop = async (id) => {
 
 const updateUser = async (userId, updateData) => {
   try {
-    const user = await User.findByIdAndUpdate(userId, updateData, { new: true }).populate('parkings')
+    const user = await User.findByIdAndUpdate(userId, updateData, { new: true, fields: {
+      password: 0
+    } }).populate('parkings')
     return user
   } catch (error) {
     console.log(error)

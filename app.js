@@ -10,6 +10,7 @@ const indicadorRoute = require('./src/routes/indicadorRoute')
 
 
 const conectDB = require('./src/config/db')
+const iniciarSeeders = require('./src/utils/seeder')
 
 
 const app = express();
@@ -17,6 +18,10 @@ const port = process.env.PORT || 8000
 
 //connect to DB
 conectDB()
+
+//iniciar seeaders 
+//iniciarSeeders()
+
 
 
 app.use(express.json());

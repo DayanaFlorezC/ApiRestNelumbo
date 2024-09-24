@@ -10,7 +10,6 @@ const conectDB = async () => {
         return;
     }
 
-
     try {
         const conect = await mongoose.connect(process.env.URI_CONNECTDB);
 
