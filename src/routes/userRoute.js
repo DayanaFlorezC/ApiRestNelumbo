@@ -8,7 +8,8 @@ const {
     deleteUserController,
     loginUserController,
     linkUserParkingController,
-    enviarEmailController
+    enviarEmailController,
+    unlinkUserParkingController
 } = require('../controllers/userController')
 
 //?midlewares
@@ -16,33 +17,36 @@ const authFunction = require('../midlewares/auth')
 const authAdminFunction = require('../midlewares/authAdmin')
 
 const {
-    validateLogin, 
-    validateCreateUser, 
+    validateLogin,
+    validateCreateUser,
     validateCreateEmail
-}= require('../midlewares/dataValidator')
+} = require('../midlewares/dataValidator')
 
-// get usuarios 
+//? get usuarios 
 router.get('/users', authFunction, authAdminFunction, getUsersController)
 
-//get user
+//? get user
 router.get('/user/:userId', authFunction, getUserByIdController)
 
-//create user role socio
+//? create user role socio
 router.post('/user', authFunction, authAdminFunction, validateCreateUser, createUserController)
 
-//login user
+//? login user
 router.post('/user/login', validateLogin, loginUserController)
 
-//update user
+//? update user
 router.put('/user/:userId', authFunction, updateUserController)
 
-//delete user
+//? delete user
 router.delete('/user/:userId', authFunction, deleteUserController)
 
-//link socio a parqueadero
+//? link socio a parqueadero
 router.patch('/user/:userId/parking', authFunction, authAdminFunction, linkUserParkingController)
 
-//send email
+//? Unlink socio to parking
+router.patch('/user/:userId/unlink-parking', authFunction, authAdminFunction, unlinkUserParkingController)
+
+//? send email
 router.post('/email', authFunction, authAdminFunction, validateCreateEmail, enviarEmailController)
 
 

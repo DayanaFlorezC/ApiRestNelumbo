@@ -9,7 +9,8 @@ const {
     updateUserService,
     loginUserService,
     linkUserParkingService,
-    enviarEmailService
+    enviarEmailService,
+    unlinkUserParkingService
  } = require('../services/userService')
 
 const createUserController = async (req, res) => {
@@ -137,6 +138,17 @@ const linkUserParkingController = async (req, res) =>{
     }
 }
 
+const unlinkUserParkingController = async (req, res) =>{
+    try {
+        const {parkingId} = req.body
+        const {userId} = req.params
+        const resp = await unlinkUserParkingService(parkingId, userId)
+        res.json({sucees: true, mensaje: 'ok'})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const enviarEmailController = async (req, res) => {
     try {
         const data = req.body
@@ -157,5 +169,6 @@ module.exports = {
     deleteUserController,
     loginUserController,
     linkUserParkingController,
-    enviarEmailController
+    enviarEmailController,
+    unlinkUserParkingController
 }

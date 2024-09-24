@@ -113,6 +113,20 @@ const linkUserParking = async (userId, parkingId, userAct) => {
   }
 }
 
+const unlinkUserParking = async (parkingId, userId) =>{
+  try {
+      const ParkingIdObj = new mongoose.Types.ObjectId(parkingId)
+
+      const userUpdated = await User.findByIdAndUpdate(userId, {
+        $pull : { parkings: ParkingIdObj}
+      },{ new: true }).populate('parkings')
+
+      return userUpdated
+
+  } catch (error) {
+      console.log(error)
+  }
+}
 
 module.exports = {
   createUser,
@@ -122,5 +136,6 @@ module.exports = {
   deleteUser,
   loginUser,
   linkUserParking,
+  unlinkUserParking,
   getUserByIdWithoutPop
 }

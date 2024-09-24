@@ -7,7 +7,8 @@ const {
     updateUser,
     deleteUser,
     loginUser,
-    linkUserParking
+    linkUserParking,
+    unlinkUserParking
 } = require('../repositories/userRepository')
 
 const {
@@ -17,7 +18,6 @@ const {
 const {
     getRegisterWitoutSalida
 } = require('../repositories/registroVehiculoRepository');
-const { findById } = require('../entities/registroVehiculo');
 
 const createUserService = async ({ password, email }) => {
     try {
@@ -144,6 +144,19 @@ const linkUserParkingService = async (userId, parkingId) => {
     }
 }
 
+const unlinkUserParkingService = async (parkingId, userId) =>{
+    try {
+
+        //! agregar validaciones faltantes 
+
+        return unlinkUserParking(parkingId, userId)
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 const enviarEmailService = async (data) => {
     try {
 
@@ -194,5 +207,6 @@ module.exports = {
     updateUserService,
     loginUserService,
     linkUserParkingService,
+    unlinkUserParkingService,
     enviarEmailService
 }
