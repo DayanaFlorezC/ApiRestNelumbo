@@ -19,7 +19,7 @@ const createRegistroVehService = async (registerData) => {
 
     try {
         //?si la placa tiene un registro sin fecha de salida no permitir 
-        const resp = await getRegisterWitoutSalida(registerData)
+        const resp = await getRegisterWitoutSalida(registerData.placa)
         if (resp) return false, console.log('no se puede registrar, porque ya hay un registro sin fecha de salida')
 
 
@@ -31,6 +31,7 @@ const createRegistroVehService = async (registerData) => {
 
         if (total <= 0) return false, console.log('no se puede registrar, porque el parqueadero esta lleno')
 
+            
         return await createRegistroVeh(registerData)
     } catch (error) {
         throw new Error(`Error creating register: ${error.message}`);
@@ -80,7 +81,13 @@ const updateRegistroVehSalidaService = async (placa, idParking) => {
         const idParqueadero = register.idParqueadero
         const idRegistro = register._id
 
-        const hours = Math.abs(new Date() - register.fechaIngreso) / 36e5
+        let hours = Math.abs(new Date() - register.fechaIngreso) / 36e5
+
+        const mod = hours % 60 
+
+        if(mod){
+          hours=  Math.ceil(hours)
+        }
 
         const parking = await getParkingById(idParqueadero)
 

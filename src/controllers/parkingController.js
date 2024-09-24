@@ -51,6 +51,8 @@ const updateParkingController = async (req, res) => {
         const updateData = req.body
         const {parkingId} = req.params
         const parking = await updateParkingService(parkingId, updateData)
+        if(!parking) return res.status(400).json({success: false, mensaje: 'Algo falló'})
+        if(parking.error) return res.status(400).json({success: false, mensaje: parking.msg})
         res.json({success: true, mensaje: 'ok', parking})
     } catch (error) {
         console.log(err)

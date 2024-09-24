@@ -1,17 +1,17 @@
 const RegistroVehiculo = require('../entities/registroVehiculo')
 const mongoose = require('mongoose')
 
-const createRegistroVeh = async (registerData) =>{
+const createRegistroVeh = async (registerData) => {
   try {
     const newRegister = await RegistroVehiculo.create(registerData)
     return newRegister
-    
+
   } catch (error) {
     throw new Error(`Error creating : ${error.message}`);
   }
 }
 
-const getRegistrosVeh = async (query) =>{
+const getRegistrosVeh = async (query) => {
   try {
     const registers = await RegistroVehiculo.find(query)
     return registers
@@ -20,90 +20,88 @@ const getRegistrosVeh = async (query) =>{
   }
 }
 
-const getRegistroByIdVeh = async (id) =>{
+const getRegistroByIdVeh = async (id) => {
   try {
-
     const register = await RegistroVehiculo.findById(id)
     return register
-    
   } catch (error) {
     throw new Error(`Error getOne: ${error.message}`);
   }
 }
 
-const getRegisterByPlacaAndParking = async (placa, id) =>{
+const getRegisterByPlacaAndParking = async (placa, id) => {
   try {
     const idParqueadero = new mongoose.Types.ObjectId(id)
-    const register = await RegistroVehiculo.findOne({placa, idParqueadero, fechaSalida: null})
+    const register = await RegistroVehiculo.findOne({ placa, idParqueadero, fechaSalida: null })
 
     return register
   } catch (error) {
-    throw new Error(`Error getOne: ${error.message}`);
+    throw new Error(`Error getOne By placa: ${error.message}`);
   }
 }
 
-const updateRegistroVeh = async (id, updateData) =>{
+const updateRegistroVeh = async (id, updateData) => {
   try {
-    const register = await RegistroVehiculo.findByIdAndUpdate(id, updateData)
+    const register = await RegistroVehiculo.findByIdAndUpdate(id, updateData, { new: true })
     return register
-    
+
   } catch (error) {
     throw new Error(`Error update : ${error.message}`);
   }
 }
 
-const deleteRegistroVeh = async (id) =>{
+const deleteRegistroVeh = async (id) => {
   try {
     const register = await RegistroVehiculo.findByIdAndDelete(id)
     return register
-    
+
   } catch (error) {
     throw new Error(`Error delete register: ${error.message}`);
   }
 }
 
-const getRegisterWitoutSalida = async ({placa, idParqueadero}) =>{
+const getRegisterWitoutSalida = async (placa) => {
   try {
-    const register = await RegistroVehiculo.findOne({placa, fechaSalida: null})
+    const register = await RegistroVehiculo.findOne({ placa, fechaSalida: null })
     return register
-    
+
+  } catch (error) {
+    throw new Error(`Error create salida: ${error.message}`);
+  }
+}
+
+const getAmountVeh = async (id) => {
+
+  try {
+    const idParqueadero = new mongoose.Types.ObjectId(id)
+
+    const veh = await RegistroVehiculo.find({ idParqueadero, fechaSalida: null })
+
+    return veh.length
+
   } catch (error) {
     throw new Error(`Error : ${error.message}`);
   }
 }
 
-const getAmountVeh = async (id) =>{
 
+const getRegisterByParkingId = async (id) => {
   try {
-
-    //convert id en objeto id
-    const idParqueadero = new mongoose.Types.ObjectId(id)
-
-    const veh = await RegistroVehiculo.find({idParqueadero, fechaSalida: null})
-
-    console.log(veh)
-
-    return veh.length
-    
-  } catch (error) {
-    console.log(error) 
-  }
-}
-
-
-const getRegisterByParkingId = async (id) =>{
-  try {
-    const registers = await RegistroVehiculo.find({idParqueadero: id, fechaSalida: null})
+    const registers = await RegistroVehiculo.find({ idParqueadero: id, fechaSalida: null })
     return registers
-}catch (error) {
-    throw new Error(`Error getAll: ${error.message}`);
+  } catch (error) {
+    throw new Error(`Error : ${error.message}`);
   }
 }
-//indicadores 
 
-// Top 10 vehículos que más veces se han registrado en los diferentes parqueaderos y cuantas veces han sido
+//?indicadores 
 
-const getTopVehAllParkings = async () =>{
+/*
+Top 10 vehículos que más veces se han registrado en los diferentes parqueaderos 
+y cuantas veces han sido
+*/
+
+const getTopVehAllParkings = async () => {
   try {
     const veh = await RegistroVehiculo.aggregate([
       {
@@ -121,14 +119,14 @@ const getTopVehAllParkings = async () =>{
     ])
     return veh
   } catch (error) {
-    console.log(error)
-
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
-//Top 10 vehículos que más veces se han registrado en un parqueadero y cuantas veces han sido
 
-const getTopVehOneParking = async (id) =>{
+//?Top 10 vehículos que más veces se han registrado en un parqueadero y cuantas veces han sido
+
+const getTopVehOneParking = async (id) => {
   try {
     const idParqueadero = new mongoose.Types.ObjectId(id)
     const veh = await RegistroVehiculo.aggregate([
@@ -150,17 +148,17 @@ const getTopVehOneParking = async (id) =>{
     ])
     return veh
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
-//verificar de los vehículos parqueados cuales son por primera vez en ese parqueadero
-const getVehFirstTime = async (id) =>{
+//?verificar de los vehículos parqueados cuales son por primera vez en ese parqueadero
+const getVehFirstTime = async (id) => {
   try {
     const idParqueadero = new mongoose.Types.ObjectId(id)
     const vehiculos = await RegistroVehiculo.aggregate([
       {
-        $match: { idParqueadero}
+        $match: { idParqueadero }
       },
       {
         $group: {
@@ -175,15 +173,14 @@ const getVehFirstTime = async (id) =>{
     ])
 
     return vehiculos
-   
+
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
-//obtener las ganancias de hoy, esta semana, este mes, este año de un parqueadero en especifico
-
-const getGanancias = async (id) =>{
+//? Todas las ganancias de un parqueadero
+const getGanancias = async (id) => {
   try {
     const idParqueadero = new mongoose.Types.ObjectId(id)
     const ganancias = await RegistroVehiculo.aggregate([
@@ -199,14 +196,14 @@ const getGanancias = async (id) =>{
     ])
 
     return ganancias
-   
+
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
-//ganancias hoy
-const getGananciasHoy = async (id) =>{
+//? ganancias hoy
+const getGananciasHoy = async (id) => {
   try {
     const idParqueadero = new mongoose.Types.ObjectId(id)
 
@@ -223,16 +220,16 @@ const getGananciasHoy = async (id) =>{
     ])
 
     return ganancias
-   
+
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
-//ganancias semana
-const getGananciasSemana = async (id) =>{
+//?ganancias semana
+const getGananciasSemana = async (id) => {
   try {
-    const idParqueadero = new mongoose.Types.ObjectId(id)
+    const idParqueadero = new mongoose.Types.ObjectId(id)    
     const ganancias = await RegistroVehiculo.aggregate([
       {
         $match: { idParqueadero, fechaIngreso: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)), $lt: new Date() } }
@@ -246,14 +243,14 @@ const getGananciasSemana = async (id) =>{
     ])
 
     return ganancias
-   
+
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
-//ganancias mes
-const getGananciasMes = async (id) =>{
+//?ganancias mes
+const getGananciasMes = async (id) => {
   try {
     const idParqueadero = new mongoose.Types.ObjectId(id)
     const ganancias = await RegistroVehiculo.aggregate([
@@ -269,14 +266,14 @@ const getGananciasMes = async (id) =>{
     ])
 
     return ganancias
-   
+
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
-//ganancias año
-const getGananciasAnio = async (id) =>{
+//?ganancias año
+const getGananciasAnio = async (id) => {
   try {
     const idParqueadero = new mongoose.Types.ObjectId(id)
     const ganancias = await RegistroVehiculo.aggregate([
@@ -292,16 +289,15 @@ const getGananciasAnio = async (id) =>{
     ])
 
     return ganancias
-   
+
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
+//?Top 3 de los socios con más ingresos de vehículos en la semana actual y mostrar la cantidad de vehículos
 
-//Top 3 de los socios con más ingresos de vehículos en la semana actual y mostrar la cantidad de vehículos
-
-const getTopSociosSemana = async () =>{
+const getTopSociosSemana = async () => {
   try {
     const socios = await RegistroVehiculo.aggregate([
       {
@@ -334,14 +330,14 @@ const getTopSociosSemana = async () =>{
     ])
 
     return socios
-   
+
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
-//Top 3 de los parqueaderos con mayor ganancia en la semana
-const getTopParqueaderosSemana = async () =>{
+//?Top 3 de los parqueaderos con mayor ganancia en la semana
+const getTopParqueaderosSemana = async () => {
   try {
     const parqueaderos = await RegistroVehiculo.aggregate([
       {
@@ -373,31 +369,31 @@ const getTopParqueaderosSemana = async () =>{
     ])
 
     return parqueaderos
-   
+
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error : ${error.message}`);
   }
 }
 
-  module.exports={
-   createRegistroVeh,
-   getRegistrosVeh,
-   getRegistroByIdVeh,
-   updateRegistroVeh,
-   deleteRegistroVeh,
-   getRegisterWitoutSalida,
-   getAmountVeh,
-   getRegisterByParkingId,
-   getRegisterByPlacaAndParking,
-    getTopVehAllParkings,
-    getTopVehOneParking,
-    getVehFirstTime,
-    getGanancias,
-    getGananciasHoy,
-    getGananciasSemana,
-    getGananciasMes,
-    getGananciasAnio,
-    getTopSociosSemana,
-    getTopParqueaderosSemana
+module.exports = {
+  createRegistroVeh,
+  getRegistrosVeh,
+  getRegistroByIdVeh,
+  updateRegistroVeh,
+  deleteRegistroVeh,
+  getRegisterWitoutSalida,
+  getAmountVeh,
+  getRegisterByParkingId,
+  getRegisterByPlacaAndParking,
+  getTopVehAllParkings,
+  getTopVehOneParking,
+  getVehFirstTime,
+  getGanancias,
+  getGananciasHoy,
+  getGananciasSemana,
+  getGananciasMes,
+  getGananciasAnio,
+  getTopSociosSemana,
+  getTopParqueaderosSemana
 
-  }
+}

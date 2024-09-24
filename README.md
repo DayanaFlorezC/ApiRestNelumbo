@@ -74,11 +74,11 @@ El proyecto sigue la siguiente estructura de carpetas:
     /config
 /app.js
 
-# Controladores que manejan la lógica de cada entidad /controllers 
-# entities # Modelos de las colecciones de MongoDB  
-# Definición de las rutas y sus respectivas funciones /routes
-# Servicios para validaciones y lógica adicional /services
-# Configuraciones del entorno y la base de datos  /config
- # Middlewares para validaciones y autenticación /middlewares 
+Controladores que manejan la lógica de cada entidad /controllers 
+entities # Modelos de las colecciones de MongoDB  
+Definición de las rutas y sus respectivas funciones /routes
+Servicios para validaciones y lógica adicional /services
+Configuraciones del entorno y la base de datos  /config
+Middlewares para validaciones y autenticación /middlewares 
  
-  # Archivo principal que inicializa el servidor - app.js
+Archivo principal que inicializa el servidor - app.js

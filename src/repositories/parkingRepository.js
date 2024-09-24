@@ -7,7 +7,7 @@ const createParking = async (parkingData) => {
       const newParking = await Parking.create(parkingData);
       return newParking;
     } catch (error) {
-      throw new Error(`Error creating user: ${error.message}`);
+      throw new Error(`Error creating parking: ${error.message}`);
     }
   };
 

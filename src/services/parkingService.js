@@ -11,7 +11,8 @@ const {
 } = require('../repositories/userRepository')
 
 const {
-    getRegisterByParkingId
+    getRegisterByParkingId,
+    getAmountVeh
 } = require('../repositories/registroVehiculoRepository')
 
 
@@ -58,6 +59,16 @@ const getParkingByIdService = async (id, user) => {
 
 const updateParkingService = async (id, updateData) => {
     try {
+
+        const current_veh = await getAmountVeh(id)
+
+        if(updateData?.capacidad && current_veh > updateData?.capacidad){
+            return  {
+                error: true,
+                msg: "No se puede actualizar la capacidad del parqueadero a una menor a la cantidad actual de vehiculos"
+            }
+        }
+
         return await updateParking(id, updateData)
 
     } catch (error) {

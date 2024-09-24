@@ -21,6 +21,8 @@ const getTopVeh = async (query) => {
 
         if(query.type === 'first') return await getVehFirstTime(query.idParqueadero)
 
+        return false
+
     } catch (error) {
         throw new Error(`Error in parking service: ${error.message}`);
     }

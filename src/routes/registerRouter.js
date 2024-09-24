@@ -14,6 +14,10 @@ const {
 const authFunction = require('../midlewares/auth')
 const authAdminFunction = require('../midlewares/authAdmin')
 
+const {
+    validateCreateRegistersInOut
+}= require('../midlewares/dataValidator')
+
 
 // get  
 router.get('/registers', authFunction, getRegistrosVehController)
@@ -22,13 +26,13 @@ router.get('/registers', authFunction, getRegistrosVehController)
 router.get('/register/:registerId', authFunction, getRegistroByIdVehController)
 
 //create  
-router.post('/register', authFunction, createRegistroVehController)
+router.post('/register', authFunction, validateCreateRegistersInOut, createRegistroVehController)
 
 //update
 router.put('/register/:registerId', authFunction, updateRegistroVehController)
 
 //update
-router.post('/registerSalida/', authFunction, createRegisterSalida)
+router.post('/register/salida', authFunction, validateCreateRegistersInOut, createRegisterSalida)
 
 //delete
 router.delete('/register/:registerId', authFunction, deleteRegistroVehController)

@@ -130,7 +130,7 @@ const linkUserParkingController = async (req, res) =>{
 
         if(user.error) return res.status(400).json({success: false, mensaje: user.msg})
 
-        res.json({success: true, mensaje: 'Socio asignado correctamente al parqueadero', user})
+        res.json({success: true, mensaje: 'Socio asignado correctamente al parqueadero'})
     } catch (error) {
         console.log(error)
         res.status(400).json({success: false,  mensaje: 'Algo falló'})
@@ -141,6 +141,7 @@ const enviarEmailController = async (req, res) => {
     try {
         const data = req.body
         const user = await enviarEmailService(data)
+        if(user.error) return res.status(400).json({success: false, mensaje: user.msg})
         res.json({success: true, mensaje: 'Email enviado correctamente', user})
     } catch (error) {
         console.log(error)

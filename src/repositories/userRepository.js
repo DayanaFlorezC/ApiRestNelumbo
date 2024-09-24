@@ -85,9 +85,7 @@ const updateUser = async (userId, updateData) => {
 
 const deleteUser = async (userId) => {
   try {
-    const user = await User.findByIdAndDelete(userId)
-    console.log(user, 'borrar')
-    delete user.password
+    const user = await User.findByIdAndDelete(userId)    
     return user
   } catch (error) {
     console.log(error)

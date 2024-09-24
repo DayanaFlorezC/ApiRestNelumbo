@@ -161,7 +161,7 @@ const enviarEmailService = async (data) => {
         }
 
         //?validacion que la placa este en el parqueadero
-        if (register.idParqueadero !== parking._id) return {
+        if (register.idParqueadero+'' !== parking._id+'') return {
             error: true,
             msg: 'La placa no esta en el parqueadero'
         }
