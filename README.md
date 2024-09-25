@@ -20,7 +20,7 @@ Sigue estos pasos para configurar el proyecto localmente:
 1. Clonar el repositorio:
 
    ```bash
-   git clone - enlace -
+   git clone 
 
 2. Instalar las dependencias:
 
@@ -28,10 +28,11 @@ npm install
 
 3. Crear un archivo .env en la raíz del proyecto con las siguientes variables de entorno:
 
+```
 DB_URI: URI de conexión a MongoDB.
 PORT: Puerto donde la API se ejecutará.
 JWT_SECRET: Clave secreta para la generación de tokens JWT.
-Configuración de servicio de envío de correos electrónicos (según el servicio que utilices).
+```
 
 4. Ejecutar el proyecto 
 
@@ -46,6 +47,8 @@ Los endpoints están distribuidos en tres secciones principales, de acuerdo a la
 - **Parqueaderos**: CRUD para la gestión de parqueaderos.
 - **Indicadores**: Consulta de estadísticas y datos clave sobre registros de vehículos.
 
+Además, se ha implementado un endpoint que permite al rol de administrador gestionar el envío de correos electrónicos a los socios. Es fundamental que el microservicio esté correctamente configurado para acceder al recurso de envío de correos electrónicos
+
 ## Autenticación
 
 La API utiliza JWT para autenticar las solicitudes. El token JWT se debe enviar en los encabezados de las peticiones protegidas para verificar los permisos basados en el rol del usuario (admin o socio).
@@ -56,8 +59,7 @@ La API utiliza JWT para autenticar las solicitudes. El token JWT se debe enviar 
 
 ## Endpoints
 
-Todos los endpoints y pruebas correspondientes se encuentran en el siguiente enlace de Postman:  
-**[Postman Collection - APIREST Prueba Técnica Nelumbo]**
+Todos los endpoints y pruebas correspondientes se encuentran en Postman. 
 
 ## Estructura del Proyecto
 
@@ -75,6 +77,8 @@ El proyecto sigue la siguiente estructura de carpetas:
 /app.js
 
 ```
+
+# Diagrama UML
 ![Diagrama UML](./public/DiagramaNelumboApiRest.drawio.png)
 
 
