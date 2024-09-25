@@ -101,8 +101,8 @@ const validateCreateRegistersInOut = [
 ]
 
 const validatePutParking = [
-    check('capacidad').optional(),
-    check('costoByhour').optional(),
+    check('capacidad').optional().isFloat({ gt: 0 }).withMessage('La capacidad debe ser mayor a cero'),
+    check('costoByhour').optional().isFloat({ gt: 0 }).withMessage('El costo por hora debe ser mayor a cero'),
     check('nombre').optional(),
 
     (req, res, next) => {

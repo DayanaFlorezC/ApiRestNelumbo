@@ -3,7 +3,6 @@
 Este proyecto es una API REST que maneja la lógica de negocio de un sistema de parqueaderos con roles de **admin** y **socio**, además de la integración con un servicio de envío de correos electrónicos.
 
 ## Descripción 
-## Descripción 
 
 La API permite la gestión de usuarios y parqueaderos, junto con el registro de vehículos y consulta de indicadores. Se ha implementado autenticación basada en JWT, controlando los permisos según el rol del usuario (admin o socio). Adicionalmente, esta API interactúa con un servicio externo para el envío de correos electrónicos.
 
@@ -76,12 +75,14 @@ El proyecto sigue la siguiente estructura de carpetas:
 /app.js
 
 ```
+![Diagrama UML](./public/DiagramaNelumboApiRest.drawio.png)
 
-Controladores que manejan la lógica de cada entidad /controllers 
-entities # Modelos de las colecciones de MongoDB  
-Definición de las rutas y sus respectivas funciones /routes
-Servicios para validaciones y lógica adicional /services
-Configuraciones del entorno y la base de datos  /config
-Middlewares para validaciones y autenticación /middlewares 
+
+- Controladores que manejan la lógica de cada entidad /controllers 
+- Entities - Modelos de las colecciones de MongoDB  /entities
+- Routes - Definición de las rutas y sus respectivas funciones /routes
+- Servicios - para validaciones y lógica adicional /services
+- Configuraciones del entorno y la base de datos  /config
+- Middlewares - para validaciones y autenticación /middlewares 
  
 Archivo principal que inicializa el servidor - app.js
