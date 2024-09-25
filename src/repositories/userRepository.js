@@ -1,4 +1,3 @@
-const { find } = require('../entities/registroVehiculo');
 const User = require('../entities/user')
 const mongoose = require('mongoose')
 
@@ -14,18 +13,14 @@ const createUser = async (userData) => {
 };
 
 //?login
-const loginUser = async (userData) => { 
+const loginUser = async (userData) => {
   try {
     const { email } = userData
     const user = await User.findOne({ email })
 
-  
     if (!user) return false
-
     return user
-
   } catch (error) {
-    console.log(error)
     throw new Error(`Error login user: ${error.message}`);
   }
 }
@@ -45,7 +40,7 @@ const getUsers = async (query) => {
     }).populate('parkings')
     return users
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error get users: ${error.message}`);
   }
 }
 
@@ -60,7 +55,7 @@ const getUserById = async (id) => {
     }).populate('parkings')
     return user
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error get user: ${error.message}`);
   }
 }
 
@@ -69,38 +64,43 @@ const getUserByIdWithoutPop = async (id) => {
     const user = await User.findById(id)
     return user
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error get user sin populate: ${error.message}`);
+
   }
 }
 
 const updateUser = async (userId, updateData) => {
   try {
-    const user = await User.findByIdAndUpdate(userId, updateData, { new: true, fields: {
-      password: 0
-    } }).populate('parkings')
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true, fields: {
+        password: 0
+      }
+    }).populate('parkings')
     return user
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error update user: ${error.message}`);
+
   }
 }
 
 
 const deleteUser = async (userId) => {
   try {
-    const user = await User.findByIdAndDelete(userId)    
+    const user = await User.findByIdAndDelete(userId)
     return user
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error delete user: ${error.message}`);
+
   }
 }
 
 
-//link partnert to parking
-const linkUserParking = async (userId, parkingId, userAct) => {
+//?link partnert to parking
+const linkUserParking = async (userId, parkingId) => {
   try {
 
     const parkingObjectId = new mongoose.Types.ObjectId(parkingId)
-    
+
     const user = await User.findByIdAndUpdate(userId, {
       $push: { parkings: parkingObjectId }
     },
@@ -109,22 +109,22 @@ const linkUserParking = async (userId, parkingId, userAct) => {
     return user
 
   } catch (error) {
-    console.log(error)
+    throw new Error(`Error link parking user: ${error.message}`);
   }
 }
 
-const unlinkUserParking = async (parkingId, userId) =>{
+const unlinkUserParking = async (parkingId, userId) => {
   try {
-      const ParkingIdObj = new mongoose.Types.ObjectId(parkingId)
+    const ParkingIdObj = new mongoose.Types.ObjectId(parkingId)
 
-      const userUpdated = await User.findByIdAndUpdate(userId, {
-        $pull : { parkings: ParkingIdObj}
-      },{ new: true }).populate('parkings')
+    const userUpdated = await User.findByIdAndUpdate(userId, {
+      $pull: { parkings: ParkingIdObj }
+    }, { new: true }).populate('parkings')
 
-      return userUpdated
+    return userUpdated
 
   } catch (error) {
-      console.log(error)
+    throw new Error(`Error unlink parking user: ${error.message}`);
   }
 }
 

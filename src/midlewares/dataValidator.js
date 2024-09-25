@@ -1,4 +1,4 @@
-const { check, validationResult } = require('express-validator')
+const { check, param, validationResult } = require('express-validator')
 
 
 const validateLogin = [
@@ -31,6 +31,7 @@ const validateCreateUser = [
 ]
 
 const validateUserPut = [
+
     check("nombre").notEmpty().withMessage('El nombre es obligatorio'),
 
     (req, res, next) => {
@@ -99,11 +100,45 @@ const validateCreateRegistersInOut = [
     }
 ]
 
+const validatePutParking = [
+    check('capacidad').optional(),
+    check('costoByhour').optional(),
+    check('nombre').optional(),
+
+    (req, res, next) => {
+        const errors = validationResult(req)
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() })
+        }
+
+        next()
+    }
+]
+
+const validateUserParking =[
+    check('parkingId').notEmpty().withMessage('parkingId es requerido'),
+    param('userId').notEmpty().withMessage('userId es requerido'),
+
+    (req, res, next) => {
+        const errors = validationResult(req)
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() })
+        }
+
+        next()
+    }
+
+]
+
 module.exports = {
     validateLogin,
     validateCreateUser,
     validateUserPut,
     validateCreateEmail,
     validateCreateParking,
-    validateCreateRegistersInOut
+    validateCreateRegistersInOut,
+    validatePutParking,
+    validateUserParking
 }

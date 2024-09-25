@@ -15,6 +15,8 @@ const {
     getAmountVeh
 } = require('../repositories/registroVehiculoRepository')
 
+const validFieldsAllowsUpdate = require('../utils/validFieldsUpdate')
+
 
 const createParkingService = async (data) => {
     try {
@@ -69,7 +71,15 @@ const updateParkingService = async (id, updateData) => {
             }
         }
 
-        return await updateParking(id, updateData)
+        const fieldsAllows = ['nombre', 'costoByhour', 'capacidad']
+        const valid = await validFieldsAllowsUpdate(fieldsAllows, updateData)
+
+        if(!valid) return {
+            error: true,
+            msg: 'Algo falló al validar los campós a actualizar'
+        }
+
+        return await updateParking(id, valid)
 
     } catch (error) {
         throw new Error(`Error in parking service: ${error.message}`);

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const validFieldsAllowsUpdate = require('../utils/validFieldsUpdate')
 
 const {
     createUser,
@@ -18,6 +19,10 @@ const {
 const {
     getRegisterWitoutSalida
 } = require('../repositories/registroVehiculoRepository');
+
+const {
+    createEmail
+} = require("../repositories/emailRepository")
 
 const createUserService = async ({ password, email }) => {
     try {
@@ -90,7 +95,13 @@ const getUserByIdService = async (id) => {
 
 const updateUserService = async (userId, updateData) => {
     try {
-        return await updateUser(userId, updateData)
+        const fieldsAllows = ['nombre']
+        const valid = await validFieldsAllowsUpdate(fieldsAllows, updateData)
+        if(!valid) return {
+            error: true,
+            msg: 'Algo falló al validar los campós a actualizar'
+        }
+        return await updateUser(userId, valid)
 
     } catch (error) {
         return {
@@ -121,7 +132,6 @@ const linkUserParkingService = async (userId, parkingId) => {
         }
 
         if (user.isParkingExists(parkingId)) {
-            console.log('El parking ya existe en el usuario.');
             return {
                 error: true,
                 msg: 'El usuario ya tiene este parqueadero asignado'
@@ -147,12 +157,23 @@ const linkUserParkingService = async (userId, parkingId) => {
 const unlinkUserParkingService = async (parkingId, userId) =>{
     try {
 
-        //! agregar validaciones faltantes 
+        const user = await getUserById(userId)
+
+        if (!user.isParkingExists(parkingId)) {
+            return {
+                error: true,
+                msg: 'El usuario no tiene asignado este parqueadero'
+            }
+          }
+
 
         return unlinkUserParking(parkingId, userId)
         
     } catch (error) {
-        console.log(error)
+        return {
+            error: true,
+            msg: error.message
+        }
     }
 }
 
@@ -190,7 +211,20 @@ const enviarEmailService = async (data) => {
             body: JSON.stringify(data)
         })
 
-        return true
+        if(response.status === 200) {
+            await createEmail({
+                to: data.email,
+                from: 'mayoflorezc@gmail.com',
+                subject: 'Prueba estacionamiento',
+                placa: data.placa, 
+                idParking: data.parqueaderoId,
+                message: data.mensaje
+            }) 
+            return true 
+        }else{
+            return false
+        }
+
     } catch (error) {
         return {
             error: true,

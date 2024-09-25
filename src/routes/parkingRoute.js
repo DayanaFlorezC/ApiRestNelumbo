@@ -15,7 +15,8 @@ const authFunction = require('../midlewares/auth')
 const authAdminFunction = require('../midlewares/authAdmin')
 
 const {
-    validateCreateParking
+    validateCreateParking,
+    validatePutParking
 }= require('../midlewares/dataValidator')
 
 
@@ -32,7 +33,7 @@ router.get('/parking/registers/:parkingId', authFunction, getParkingRegisterCont
 router.post('/parking', authFunction, authAdminFunction, validateCreateParking, createParkingController)
 
 //update
-router.put('/parking/:parkingId', authFunction, authAdminFunction, updateParkingController)
+router.put('/parking/:parkingId', authFunction, authAdminFunction, validatePutParking, updateParkingController)
 
 //delete
 router.delete('/parking/:parkingId', authFunction, authAdminFunction, deleteParkingController)

@@ -13,6 +13,7 @@ const createRegistroVehController = async (req, res) =>{
         registerData.idSocio = req.user.id;
         const newRegister = await createRegistroVehService(registerData)
         if(!newRegister) return res.status(400).json({success: false, mensaje: 'No se puede Registrar Ingreso, ya existe la placa en este u otro parqueadero o el parqueadero esta lleno'})
+        if(newRegister.error) return res.status(400).json({success: false, mensaje: newRegister.msg})
         res.status(201).json({success: true, mensaje: 'Registro de vehiculo creado con éxito', id: newRegister._id})
         
     } catch (error) {

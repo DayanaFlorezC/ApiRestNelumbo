@@ -19,7 +19,8 @@ const authAdminFunction = require('../midlewares/authAdmin')
 const {
     validateLogin,
     validateCreateUser,
-    validateCreateEmail
+    validateCreateEmail,
+    validateUserParking
 } = require('../midlewares/dataValidator')
 
 //? get usuarios 
@@ -41,10 +42,10 @@ router.put('/user/:userId', authFunction, updateUserController)
 router.delete('/user/:userId', authFunction, deleteUserController)
 
 //? link socio a parqueadero
-router.patch('/user/:userId/parking', authFunction, authAdminFunction, linkUserParkingController)
+router.patch('/user/:userId/parking', authFunction, authAdminFunction, validateUserParking, linkUserParkingController)
 
 //? Unlink socio to parking
-router.patch('/user/:userId/unlink-parking', authFunction, authAdminFunction, unlinkUserParkingController)
+router.patch('/user/:userId/unlink-parking', authFunction, authAdminFunction, validateUserParking, unlinkUserParkingController)
 
 //? send email
 router.post('/email', authFunction, authAdminFunction, validateCreateEmail, enviarEmailController)

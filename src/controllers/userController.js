@@ -88,7 +88,7 @@ const getUserByIdController = async (req, res) => {
         if(req.user.role !== 'admin' && req.user.id !== userId ) return res.json({success: false, mensaje: 'No tienes permisos para ver este usuario'})
         const user = await getUserByIdService(userId)
         if(!user) return res.json({success: false, mensaje: 'Usuario no encontrado'})
-        if(user.error) return res.status(400).json({success: false, mensaje: 'Algo falló'})
+        if(user.error) return res.status(400).json({success: false, mensaje: user.msg})
         res.json({success: true, mensaje: 'ok', user})
     } catch (error) {
         console.log(err)
@@ -128,8 +128,9 @@ const linkUserParkingController = async (req, res) =>{
         const {userId} = req.params
 
         const user = await linkUserParkingService(userId, parkingId)
-
         if(user.error) return res.status(400).json({success: false, mensaje: user.msg})
+
+            console.log(user, 'ss')
 
         res.json({success: true, mensaje: 'Socio asignado correctamente al parqueadero'})
     } catch (error) {
@@ -143,9 +144,12 @@ const unlinkUserParkingController = async (req, res) =>{
         const {parkingId} = req.body
         const {userId} = req.params
         const resp = await unlinkUserParkingService(parkingId, userId)
-        res.json({sucees: true, mensaje: 'ok'})
+        if(!resp) return res.status(400).json({success: false, mensaje: 'Algo falló'})
+        if(resp.error) return res.status(400).json({success: false, mensaje: resp.msg})
+        res.json({success: true, mensaje: 'Asignación eliminada correctamente'})
     } catch (error) {
         console.log(error)
+        res.status(400).json({success: false,  mensaje: 'Algo falló'})
     }
 }
 
@@ -153,6 +157,7 @@ const enviarEmailController = async (req, res) => {
     try {
         const data = req.body
         const user = await enviarEmailService(data)
+        if(!user) return res.status(400).json({success: false, mensaje: 'Error en la petición'})
         if(user.error) return res.status(400).json({success: false, mensaje: user.msg})
         res.json({success: true, mensaje: 'Email enviado correctamente', user})
     } catch (error) {
