@@ -64,6 +64,7 @@ Todos los endpoints y pruebas correspondientes se encuentran en el siguiente enl
 
 El proyecto sigue la siguiente estructura de carpetas:
 
+```
 /src 
     /controllers 
     /routes
@@ -73,6 +74,8 @@ El proyecto sigue la siguiente estructura de carpetas:
     /repositories
     /config
 /app.js
+
+```
 
 Controladores que manejan la lógica de cada entidad /controllers 
 entities # Modelos de las colecciones de MongoDB  
